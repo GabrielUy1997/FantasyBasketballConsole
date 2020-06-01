@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{4D7FA1F2-9C4C-4F36-872A-950B87A15151}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FantasyBasketBallConsole", "ConsoleApp1\FantasyBasketBallConsole.csproj", "{4D7FA1F2-9C4C-4F36-872A-950B87A15151}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

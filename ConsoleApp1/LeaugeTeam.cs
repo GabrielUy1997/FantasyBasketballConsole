@@ -8,7 +8,7 @@ namespace ConsoleApp1
 {
     class LeaugeTeam
     {
-        public int[] team;
+        public List<int> team;
         public double[][] PlayersScores;
         int NumPlayers;
         protected Boolean IsHuman;
@@ -18,7 +18,7 @@ namespace ConsoleApp1
         public int Losses;
         public LeaugeTeam()
         {
-            team = new int[5];
+            team = new List<int>(5);
             PlayersScores = new double[5][];
             PlayersScores[0] = new double[7];
             PlayersScores[1] = new double[7];
@@ -34,6 +34,11 @@ namespace ConsoleApp1
         {
             team[NumPlayers] = a_player;
             NumPlayers++;
+        }
+        public void DroppingPlayer(int a_player)
+        {
+            team.RemoveAt(a_player);
+            NumPlayers--;
         }
         public String GetName()
         {
@@ -95,7 +100,7 @@ namespace ConsoleApp1
             int j = 0;
             foreach(int player in team)
             {
-                Console.Write("{0}:", a_playerList[player]);
+                Console.Write("{0}.{1}:", j+1, a_playerList[player]);
                 for(int i = 0; i < 7; i++)
                 {
                     Console.Write("{0} ", PlayersScores[j][i]);

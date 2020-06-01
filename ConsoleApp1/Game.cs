@@ -445,6 +445,7 @@ namespace ConsoleApp1
             {
                 AddDrop(a_player);
             }
+            TopTenFree.Clear();
         }
 
         public void AddDrop(LeaugeTeam a_player)
@@ -456,7 +457,9 @@ namespace ConsoleApp1
             Console.WriteLine("Who would you like to drop?");
             input = Console.ReadLine();
             int playerDropping = Int32.Parse(input);
-
+            Console.WriteLine("{0} for {1}", PlayerName[TopTenFree[playerAdding]], PlayerName[a_player.team[playerDropping]]);
+            a_player.DroppingPlayer(playerDropping);
+            a_player.AddingPlayer(TopTenFree[playerAdding]);
         }
 
         public string GetPlayerID(int a_player)
