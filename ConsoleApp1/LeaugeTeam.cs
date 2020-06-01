@@ -16,6 +16,9 @@ namespace ConsoleApp1
         public Double WeekScore;
         public int Wins;
         public int Losses;
+        private int Guards;
+        private int Forwards;
+        private int Center;
         public LeaugeTeam()
         {
             team = new List<int>(5);
@@ -29,10 +32,13 @@ namespace ConsoleApp1
             WeekScore = 0;
             Wins = 0;
             Losses = 0;
+            Guards = 0;
+            Forwards = 0;
+            Center = 0;
         }
         public void AddingPlayer(int a_player)
         {
-            team[NumPlayers] = a_player;
+            team.Add(a_player);
             NumPlayers++;
         }
         public void DroppingPlayer(int a_player)
@@ -100,7 +106,7 @@ namespace ConsoleApp1
             int j = 0;
             foreach(int player in team)
             {
-                Console.Write("{0}.{1}:", j+1, a_playerList[player]);
+                Console.Write("{0}.{1}:", j, a_playerList[player]);
                 for(int i = 0; i < 7; i++)
                 {
                     Console.Write("{0} ", PlayersScores[j][i]);
@@ -109,6 +115,31 @@ namespace ConsoleApp1
                 Console.WriteLine("");
             }
         }
+
+        public bool CanDraftPosition(String[] a_PlayerPos, int a_pID)
+        {
+            string Position = a_PlayerPos[a_pID];
+            if(Position.Contains('G') == true && Guards < 2)
+            {
+                Guards++;
+                return true;
+            }
+            else if (Position.Contains('F') == true && Forwards < 2)
+            {
+                Forwards++;
+                return true;
+            }
+            else if (Position.Contains('C') == true && Center < 2)
+            {
+                Center++;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public virtual bool CanDraft()
         {
             return false;

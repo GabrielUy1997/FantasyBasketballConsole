@@ -152,12 +152,23 @@ namespace ConsoleApp1
                         {
                             throw new ArgumentException();
                         }
-                        else
+                        try
                         {
-                            PlayerName[pID] = input;
-                            AddTakenPlayer(pID);
-                            a_player.AddingPlayer(pID);
-                            validInput = true;
+                            if(a_player.CanDraftPosition(PlayerPos, pID) == false)
+                            {
+                                throw new Exception();
+                            }
+                            else
+                            {
+                                PlayerName[pID] = input;
+                                AddTakenPlayer(pID);
+                                a_player.AddingPlayer(pID);
+                                validInput = true;
+                            }
+                        }
+                        catch
+                        {
+                            Console.WriteLine("Too many players of the same position on the team");
                         }
                     }
                     catch
@@ -435,9 +446,9 @@ namespace ConsoleApp1
             }
             foreach(int player in TopTenFree)
             {
-                index++;
                 Console.Write("{0}.", index);
                 PrintPlayer(player);
+                index++;
             }
             Console.WriteLine("Would you like to add/drop a player? (y/n)");
             string input = Console.ReadLine();
@@ -458,9 +469,14 @@ namespace ConsoleApp1
             input = Console.ReadLine();
             int playerDropping = Int32.Parse(input);
             Console.WriteLine("{0} for {1}", PlayerName[TopTenFree[playerAdding]], PlayerName[a_player.team[playerDropping]]);
-            a_player.DroppingPlayer(playerDropping);
             a_player.AddingPlayer(TopTenFree[playerAdding]);
+            AddTakenPlayer(TopTenFree[playerAdding]);
+            drafted.RemoveAt(drafted.IndexOf(a_player.team[playerDropping]));
+            a_player.DroppingPlayer(playerDropping);
+
         }
+
+        
 
         public string GetPlayerID(int a_player)
         {
