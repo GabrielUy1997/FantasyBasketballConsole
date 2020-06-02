@@ -117,7 +117,7 @@ namespace ConsoleApp1
             {
                 index++;
                 totalPoints = Int32.Parse(player);
-                if (totalPoints > MostPoints && CheckIfPlayerTaken(index) != true)
+                if (totalPoints > MostPoints && CheckIfPlayerTaken(index) == false && a_team.CanDraftPosition(PlayerPos,index) == true)
                 {
                     MostPoints = totalPoints;
                     BestPick = index;
@@ -126,6 +126,18 @@ namespace ConsoleApp1
             String[] aPick = PlayerName[BestPick].Split('\\');
             PlayerName[BestPick] = aPick[0];
             Console.WriteLine("{0} Drafted: {1}", a_name, PlayerName[BestPick]);
+            if(PlayerPos[BestPick].Contains('G'))
+            {
+                a_team.AddGuard();
+            }
+            else if (PlayerPos[BestPick].Contains('F'))
+            {
+                a_team.AddForward();
+            }
+            else if (PlayerPos[BestPick].Contains('C'))
+            {
+                a_team.AddCenters();
+            }
             AddTakenPlayer(BestPick);
             a_team.AddingPlayer(BestPick);
         }

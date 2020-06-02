@@ -16,9 +16,9 @@ namespace ConsoleApp1
         public Double WeekScore;
         public int Wins;
         public int Losses;
-        private int Guards;
-        private int Forwards;
-        private int Center;
+        protected int Guards;
+        protected int Forwards;
+        protected int Center;
         public LeaugeTeam()
         {
             team = new List<int>(5);
@@ -116,7 +116,7 @@ namespace ConsoleApp1
             }
         }
 
-        public bool CanDraftPosition(String[] a_PlayerPos, int a_pID)
+        public virtual bool CanDraftPosition(String[] a_PlayerPos, int a_pID)
         {
             string Position = a_PlayerPos[a_pID];
             if(Position.Contains('G') == true && Guards < 2)
@@ -147,6 +147,20 @@ namespace ConsoleApp1
         public virtual int Menu(string[] a_playerList, List<LeaugeTeam> a_teams)
         {
             return 1;
+        }
+        public virtual void AddGuard()
+        {
+            Guards++;
+        }
+
+        public virtual void AddForward()
+        {
+            Forwards++;
+        }
+
+        public virtual void AddCenters()
+        {
+            Center++;
         }
     }
     class Human : LeaugeTeam
@@ -201,6 +215,30 @@ namespace ConsoleApp1
             } while (input != "1");
             return 0;
         }
+
+        public override bool CanDraftPosition(String[] a_PlayerPos, int a_pID)
+        {
+            string Position = a_PlayerPos[a_pID];
+            if (Position.Contains('G') == true && Guards < 2)
+            {
+                Guards++;
+                return true;
+            }
+            else if (Position.Contains('F') == true && Forwards < 2)
+            {
+                Forwards++;
+                return true;
+            }
+            else if (Position.Contains('C') == true && Center < 2)
+            {
+                Center++;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 
     class CPU : LeaugeTeam
@@ -210,9 +248,45 @@ namespace ConsoleApp1
             TeamName = Name;
             IsHuman = false;
         }
+
+        public override void AddGuard()
+        {
+            Guards++;
+        }
+
+        public override void AddForward()
+        {
+            Forwards++;
+        }
+
+        public override void AddCenters()
+        {
+            Center++;
+        }
+
         public override bool CanDraft()
         {
             return IsHuman;
+        }
+        public override bool CanDraftPosition(String[] a_PlayerPos, int a_pID)
+        {
+            string Position = a_PlayerPos[a_pID];
+            if (Position.Contains('G') == true && Guards < 2)
+            {
+                return true;
+            }
+            else if (Position.Contains('F') == true && Forwards < 2)
+            {
+                return true;
+            }
+            else if (Position.Contains('C') == true && Center < 2)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
