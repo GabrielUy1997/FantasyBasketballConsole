@@ -473,13 +473,22 @@ namespace ConsoleApp1
 
         public void AddDrop(LeaugeTeam a_player)
         {
-            Console.WriteLine("Who would you like to add?");
-            string input = Console.ReadLine();
-            int playerAdding = Int32.Parse(input);
-            a_player.ShowTeam(PlayerName);
-            Console.WriteLine("Who would you like to drop?");
-            input = Console.ReadLine();
-            int playerDropping = Int32.Parse(input);
+            int playerAdding;
+            int playerDropping;
+            do
+            {
+                Console.WriteLine("Who would you like to add?");
+                string input = Console.ReadLine();
+                playerAdding = Int32.Parse(input);
+                a_player.ShowTeam(PlayerName);
+                Console.WriteLine("Who would you like to drop?");
+                input = Console.ReadLine();
+                playerDropping = Int32.Parse(input);
+                if(PlayerPos[TopTenFree[playerAdding]] != PlayerPos[TopTenFree[playerDropping]] && a_player.CanDraftPosition(PlayerPos, TopTenFree[playerAdding]))
+                {
+                    Console.WriteLine("Too many players of the same position on the team");
+                }
+            } while (PlayerPos[TopTenFree[playerAdding]] != PlayerPos[TopTenFree[playerDropping]] && a_player.CanDraftPosition(PlayerPos, TopTenFree[playerAdding]) == false);
             Console.WriteLine("{0} for {1}", PlayerName[TopTenFree[playerAdding]], PlayerName[a_player.team[playerDropping]]);
             a_player.AddingPlayer(TopTenFree[playerAdding]);
             AddTakenPlayer(TopTenFree[playerAdding]);
@@ -594,7 +603,13 @@ namespace ConsoleApp1
         }
         public void LoadSeasonStats(Game game)
         {
-            StreamReader reader = new StreamReader(File.OpenRead(@"C:\Users\Gabe\Desktop\2018-2019.csv"));
+            String SeasonPath = @"C:\Users\Gabe\source\repos\ConsoleApp1\Seasons\";
+            String SeasonSelection;
+            String SeasonInput;
+            Console.WriteLine("What season would you like to simulate? (ex. 2018-2019)");
+            SeasonInput = Console.ReadLine();
+            SeasonSelection = SeasonPath + SeasonInput + ".csv";
+            StreamReader reader = new StreamReader(File.OpenRead(SeasonSelection));
             List<string> pID = new List<String>();
             List<string> pName = new List<String>();
             List<string> pPos = new List<String>();

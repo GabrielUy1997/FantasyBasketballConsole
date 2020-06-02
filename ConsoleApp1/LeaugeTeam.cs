@@ -187,6 +187,7 @@ namespace ConsoleApp1
                 Console.WriteLine("3. Check Standings");
                 Console.WriteLine("4. See the schedule");
                 Console.WriteLine("5. See available players");
+                Console.WriteLine("6. Inquire trade");
                 input = Console.ReadLine();
                 if (input == "1")
                 {
@@ -205,6 +206,10 @@ namespace ConsoleApp1
                     return 4;
                 }
                 else if(input == "5")
+                {
+                    return 5;
+                }
+                else if (input == "6")
                 {
                     return 5;
                 }
