@@ -211,7 +211,7 @@ namespace ConsoleApp1
                 }
                 else if (input == "6")
                 {
-                    return 5;
+                    return 6;
                 }
                 else
                 {

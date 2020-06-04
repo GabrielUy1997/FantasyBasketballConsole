@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+//do player stat page
 
 namespace ConsoleApp1
 {
@@ -411,6 +412,11 @@ namespace ConsoleApp1
                     ShowFreeAgents(a_player);
                     advance = a_player.Menu(PlayerName, Teams);
                 }
+                while(advance == 6)
+                {
+                    AskForTrade(a_player,a_CPU1,a_CPU2,a_CPU3);
+                    advance = a_player.Menu(PlayerName, Teams);
+                }
                 foreach (LeaugeTeam teams in Teams)
                 {
                     teams.WeekScore = 0;
@@ -497,7 +503,18 @@ namespace ConsoleApp1
 
         }
 
-        
+        public void AskForTrade(LeaugeTeam a_player, LeaugeTeam a_CPU, LeaugeTeam a_CPU2, LeaugeTeam a_CPU3)
+        {
+            foreach(LeaugeTeam team in Teams)
+            {
+                Console.WriteLine(team.GetName());
+                team.ShowTeam(PlayerName);
+            }
+            Console.WriteLine("Who would you like to trade with?");
+            string input = Console.ReadLine();
+
+
+        }
 
         public string GetPlayerID(int a_player)
         {
