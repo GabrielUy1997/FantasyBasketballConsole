@@ -440,19 +440,33 @@ namespace ConsoleApp1
             int MostPoints = 0;
             int index = 0;
             int totalPoints;
-           
-            for(int i = 0; i < 10; i++)
+            string input;
+            Console.WriteLine("What Positon? (all,G,F,C)");
+            input = Console.ReadLine();
+            for (int i = 0; i < 10; i++)
             {
                 foreach (string player in PlayerPoints.Skip(1))
                 {
                     index++;
                     totalPoints = Int32.Parse(player);
                     String[] PlayerNames = PlayerName[index].Split('\\');
-                    if (totalPoints > MostPoints && CheckIfPlayerTaken(index) != true && TopTenFree.Contains(index) != true)
+                    if(input == "all")
                     {
-                        MostPoints = totalPoints;
-                        BestPick = index;
+                        if (totalPoints > MostPoints && CheckIfPlayerTaken(index) != true && TopTenFree.Contains(index) != true)
+                        {
+                            MostPoints = totalPoints;
+                            BestPick = index;
+                        }
                     }
+                    else if(PlayerPos[index].Contains(input))
+                    {
+                        if (totalPoints > MostPoints && CheckIfPlayerTaken(index) != true && TopTenFree.Contains(index) != true)
+                        {
+                            MostPoints = totalPoints;
+                            BestPick = index;
+                        }
+                    }
+                   
                 }
                 String[] FreeAgent = PlayerName[BestPick].Split('\\');
                 PlayerName[BestPick] = FreeAgent[0];
@@ -469,7 +483,7 @@ namespace ConsoleApp1
                 index++;
             }
             Console.WriteLine("Would you like to add/drop a player? (y/n)");
-            string input = Console.ReadLine();
+            input = Console.ReadLine();
             if(input == "y")
             {
                 AddDrop(a_player);
@@ -481,19 +495,16 @@ namespace ConsoleApp1
         {
             int playerAdding;
             int playerDropping;
+            string input;
             do
             {
                 Console.WriteLine("Who would you like to add?");
-                string input = Console.ReadLine();
+                input = Console.ReadLine();
                 playerAdding = Int32.Parse(input);
                 a_player.ShowTeam(PlayerName);
                 Console.WriteLine("Who would you like to drop?");
                 input = Console.ReadLine();
                 playerDropping = Int32.Parse(input);
-                if(PlayerPos[TopTenFree[playerAdding]] != PlayerPos[TopTenFree[playerDropping]] && a_player.CanDraftPosition(PlayerPos, TopTenFree[playerAdding]))
-                {
-                    Console.WriteLine("Too many players of the same position on the team");
-                }
             } while (PlayerPos[TopTenFree[playerAdding]] != PlayerPos[TopTenFree[playerDropping]] && a_player.CanDraftPosition(PlayerPos, TopTenFree[playerAdding]) == false);
             Console.WriteLine("{0} for {1}", PlayerName[TopTenFree[playerAdding]], PlayerName[a_player.team[playerDropping]]);
             a_player.AddingPlayer(TopTenFree[playerAdding]);
@@ -512,8 +523,66 @@ namespace ConsoleApp1
             }
             Console.WriteLine("Who would you like to trade with?");
             string input = Console.ReadLine();
+            switch (input)
+            {
+                case "CPU1":
+                    Trade(a_player, a_CPU);
+                    break;
+                case "CPU2":
+                    Trade(a_player, a_CPU2);
+                    break;
+                case "CPU3":
+                    Trade(a_player, a_CPU3);
+                    break;
+                default:
+                    Console.WriteLine("invalid");
+                    break;
+            }
 
+        }
 
+        public void Trade(LeaugeTeam a_player, LeaugeTeam a_CPU)
+        {
+            int playerPlayer;
+            int cpuPlayer;
+            bool tradeApprove;
+            a_player.ShowTeam(PlayerName);
+            a_CPU.ShowTeam(PlayerName);
+            Console.WriteLine("Who would you like to offer?");
+            string input = Console.ReadLine();
+            playerPlayer = Int32.Parse(input);
+            Console.WriteLine("Who would you like to get?");
+            input = Console.ReadLine();
+            cpuPlayer = Int32.Parse(input);
+            if(a_player.CanDraftPosition(PlayerPos, a_CPU.team[cpuPlayer]) == true && a_CPU.CanDraftPosition(PlayerPos, a_player.team[playerPlayer]) == true)
+            {
+                tradeApprove = true;
+            }
+            else if(PlayerPos[a_player.team[playerPlayer]] == "C" && PlayerPos[a_CPU.team[cpuPlayer]] == "C")
+            {
+                tradeApprove = true;
+            }
+            else if(PlayerPos[a_player.team[playerPlayer]].Substring(1,1) == "G" && PlayerPos[a_CPU.team[cpuPlayer]].Substring(1, 1) == "G")
+            {
+                tradeApprove = true;
+            }
+            else if(PlayerPos[a_player.team[playerPlayer]].Substring(1, 1) == "F" && PlayerPos[a_CPU.team[cpuPlayer]].Substring(1, 1) == "F")
+            {
+                tradeApprove = true;
+            }
+            else
+            {
+                tradeApprove = false;
+            }
+            if(tradeApprove == true)
+            {
+                Console.WriteLine("{0} for {1}", PlayerName[a_player.team[playerPlayer]], PlayerName[a_CPU.team[cpuPlayer]]);
+                a_player.AddingPlayer(a_CPU.team[cpuPlayer]);
+                a_CPU.AddingPlayer(a_player.team[playerPlayer]);
+                a_player.DroppingPlayer(playerPlayer);
+                a_CPU.DroppingPlayer(cpuPlayer);
+               
+            }
         }
 
         public string GetPlayerID(int a_player)

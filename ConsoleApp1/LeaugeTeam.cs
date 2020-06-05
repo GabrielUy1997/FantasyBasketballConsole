@@ -140,6 +140,11 @@ namespace ConsoleApp1
             }
         }
 
+        public virtual bool AssessTrade()
+        {
+            return true;
+        }
+
         public virtual bool CanDraft()
         {
             return false;
@@ -293,5 +298,12 @@ namespace ConsoleApp1
                 return false;
             }
         }
+
+        public override bool AssessTrade()
+        {
+
+            return true;
+        }
+
     }
 }
