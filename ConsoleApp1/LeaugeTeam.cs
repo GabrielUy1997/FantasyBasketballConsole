@@ -50,57 +50,7 @@ namespace ConsoleApp1
         {
             return TeamName;
         }
-        public void ShowStandings(List<LeaugeTeam> a_Teams)
-        {
-            int top1;
-            int top2;
-            int bottom1;
-            int bottom2;
-
-            if(a_Teams[0].Wins > a_Teams[1].Wins)
-            {
-                top1 = 0;
-                bottom1 = 1;
-            }
-            else
-            {
-                top1 = 1;
-                bottom1 = 0;
-            }
-            if(a_Teams[2].Wins > a_Teams[3].Wins)
-            {
-                top2 = 2;
-                bottom2 = 3;
-            }
-            else
-            {
-                top2 = 3;
-                bottom2 = 2;
-            }
-            if (a_Teams[top1].Wins < a_Teams[top2].Wins)
-            {
-                top1 = top1 + top2;
-                top2 = top1 - top2;
-                top1 = top1 - top2;
-            }
-            if(a_Teams[bottom1].Wins < a_Teams[bottom2].Wins)
-            {
-                bottom1 = bottom1 + bottom2;
-                bottom2 = bottom1 - bottom2;
-                bottom1 = bottom1 - bottom2;
-            }
-            if (a_Teams[top2].Wins < a_Teams[bottom1].Wins)
-            {
-                top2 = top2 + bottom1;
-                bottom1 = top2 - bottom1;
-                top2 = top2 - bottom1;
-            }
-
-            Console.WriteLine("1. {0} {1} {2}", a_Teams[top1].GetName(), a_Teams[top1].Wins, a_Teams[top1].Losses);
-            Console.WriteLine("2. {0} {1} {2}", a_Teams[top2].GetName(), a_Teams[top2].Wins, a_Teams[top2].Losses);
-            Console.WriteLine("3. {0} {1} {2}", a_Teams[bottom1].GetName(), a_Teams[bottom1].Wins, a_Teams[bottom1].Losses);
-            Console.WriteLine("4. {0} {1} {2}", a_Teams[bottom2].GetName(), a_Teams[bottom2].Wins, a_Teams[bottom2].Losses);
-        }
+        
         public void ShowTeam(string[] a_playerList)
         {
             int j = 0;
@@ -140,7 +90,8 @@ namespace ConsoleApp1
             }
         }
 
-        public virtual bool AssessTrade()
+        public virtual bool AssessTrade(int a_recieve, int a_send, string[] a_Points, string[] a_OReb, string[] a_DReb, string[] a_Ast,
+            string[] a_Block, string[] a_Steal, string[] a_Tov)
         {
             return true;
         }
@@ -204,7 +155,7 @@ namespace ConsoleApp1
                 }
                 else if (input == "3")
                 {
-                    ShowStandings(a_teams);
+                    return 3;
                 }
                 else if(input == "4")
                 {
@@ -299,10 +250,46 @@ namespace ConsoleApp1
             }
         }
 
-        public override bool AssessTrade()
+        public override bool AssessTrade(int a_recieve, int a_send, string[] a_Points, string[] a_OReb, string[] a_DReb, string[] a_Ast, 
+            string[] a_Block, string[] a_Steal, string[] a_Tov)
         {
-
-            return true;
+            int betterStats = 0;
+            if(Int32.Parse(a_Points[a_recieve]) >= Int32.Parse(a_Points[a_send]))
+            {
+                betterStats++;
+            }
+            if(Int32.Parse(a_OReb[a_recieve]) >= Int32.Parse(a_OReb[a_send]))
+            {
+                betterStats++;
+            }
+            if (Int32.Parse(a_DReb[a_recieve]) >= Int32.Parse(a_DReb[a_send]))
+            {
+                betterStats++;
+            }
+            if (Int32.Parse(a_Ast[a_recieve]) >= Int32.Parse(a_Ast[a_send]))
+            {
+                betterStats++;
+            }
+            if (Int32.Parse(a_Block[a_recieve]) >= Int32.Parse(a_Block[a_send]))
+            {
+                betterStats++;
+            }
+            if (Int32.Parse(a_Steal[a_recieve]) >= Int32.Parse(a_Steal[a_send]))
+            {
+                betterStats++;
+            }
+            if (Int32.Parse(a_Tov[a_recieve]) <= Int32.Parse(a_Tov[a_send]))
+            {
+                betterStats++;
+            }
+            if (betterStats >= 4)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
     }

@@ -31,6 +31,8 @@ namespace ConsoleApp1
         private string[] PlayerTurnover;
         private string[] PlayerPersFoul;
         private string[] PlayerPoints;
+        private string Champion;
+        private String Season;
         public List<string> winners;
         public List<LeaugeTeam> Teams;
         public List<int> drafted;
@@ -265,7 +267,7 @@ namespace ConsoleApp1
             }
         }
 
-        public void SetUpWeekMatchup(LeaugeTeam a_player, LeaugeTeam a_CPU1, LeaugeTeam a_CPU2, LeaugeTeam a_CPU3)
+        public string SetUpWeekMatchup(LeaugeTeam a_player, LeaugeTeam a_CPU1, LeaugeTeam a_CPU2, LeaugeTeam a_CPU3)
         {
             matchup = 0;
             int indexX = 0;
@@ -402,6 +404,11 @@ namespace ConsoleApp1
                 Console.WriteLine("{0} wins with {1} points", Teams.ElementAt(WinnerMatch2).GetName(), Teams.ElementAt(WinnerMatch2).WeekScore);
                 int advance;
                 advance = a_player.Menu(PlayerName, Teams);
+                while (advance == 3)
+                {
+                    ShowStandings(Teams);
+                    advance = a_player.Menu(PlayerName, Teams);
+                }
                 while (advance == 4)
                 {
                     ShowSchedule();
@@ -432,6 +439,8 @@ namespace ConsoleApp1
                 }
                 
             }
+            ShowStandings(Teams);
+            return Champion; 
         }
 
         public void ShowFreeAgents(LeaugeTeam a_player)
@@ -574,7 +583,7 @@ namespace ConsoleApp1
             {
                 tradeApprove = false;
             }
-            if(tradeApprove == true)
+            if(tradeApprove == true && a_CPU.AssessTrade(a_player.team[playerPlayer], a_CPU.team[cpuPlayer], PlayerPoints, PlayerOffensReb, PlayerDefenceReb, PlayerAssist, PlayerBlock, PlayerSteal, PlayerTurnover) == true)
             {
                 Console.WriteLine("{0} for {1}", PlayerName[a_player.team[playerPlayer]], PlayerName[a_CPU.team[cpuPlayer]]);
                 a_player.AddingPlayer(a_CPU.team[cpuPlayer]);
@@ -583,6 +592,58 @@ namespace ConsoleApp1
                 a_CPU.DroppingPlayer(cpuPlayer);
                
             }
+        }
+
+        public void ShowStandings(List<LeaugeTeam> a_Teams)
+        {
+            int top1;
+            int top2;
+            int bottom1;
+            int bottom2;
+
+            if (a_Teams[0].Wins > a_Teams[1].Wins)
+            {
+                top1 = 0;
+                bottom1 = 1;
+            }
+            else
+            {
+                top1 = 1;
+                bottom1 = 0;
+            }
+            if (a_Teams[2].Wins > a_Teams[3].Wins)
+            {
+                top2 = 2;
+                bottom2 = 3;
+            }
+            else
+            {
+                top2 = 3;
+                bottom2 = 2;
+            }
+            if (a_Teams[top1].Wins < a_Teams[top2].Wins)
+            {
+                top1 = top1 + top2;
+                top2 = top1 - top2;
+                top1 = top1 - top2;
+            }
+            if (a_Teams[bottom1].Wins < a_Teams[bottom2].Wins)
+            {
+                bottom1 = bottom1 + bottom2;
+                bottom2 = bottom1 - bottom2;
+                bottom1 = bottom1 - bottom2;
+            }
+            if (a_Teams[top2].Wins < a_Teams[bottom1].Wins)
+            {
+                top2 = top2 + bottom1;
+                bottom1 = top2 - bottom1;
+                top2 = top2 - bottom1;
+            }
+            Champion = a_Teams[top1].GetName();
+            Console.WriteLine("1. {0} {1} {2}", a_Teams[top1].GetName(), a_Teams[top1].Wins, a_Teams[top1].Losses);
+            Console.WriteLine("2. {0} {1} {2}", a_Teams[top2].GetName(), a_Teams[top2].Wins, a_Teams[top2].Losses);
+            Console.WriteLine("3. {0} {1} {2}", a_Teams[bottom1].GetName(), a_Teams[bottom1].Wins, a_Teams[bottom1].Losses);
+            Console.WriteLine("4. {0} {1} {2}", a_Teams[bottom2].GetName(), a_Teams[bottom2].Wins, a_Teams[bottom2].Losses);
         }
 
         public string GetPlayerID(int a_player)
@@ -691,10 +752,9 @@ namespace ConsoleApp1
         {
             String SeasonPath = @"C:\Users\Gabe\source\repos\ConsoleApp1\Seasons\";
             String SeasonSelection;
-            String SeasonInput;
             Console.WriteLine("What season would you like to simulate? (ex. 2018-2019)");
-            SeasonInput = Console.ReadLine();
-            SeasonSelection = SeasonPath + SeasonInput + ".csv";
+            Season = Console.ReadLine();
+            SeasonSelection = SeasonPath + Season + ".csv";
             StreamReader reader = new StreamReader(File.OpenRead(SeasonSelection));
             List<string> pID = new List<String>();
             List<string> pName = new List<String>();

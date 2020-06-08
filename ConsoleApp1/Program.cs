@@ -36,11 +36,6 @@ namespace ConsoleApp1
             }
             //game.SetupSchedule();
             game.SetUpWeekMatchup(player1, cpu1, cpu2, cpu3);
-            foreach (LeaugeTeam teams in game.Teams)
-            {
-                Console.WriteLine("{0}", teams.GetName());
-                
-            }
         }
     }
 }
